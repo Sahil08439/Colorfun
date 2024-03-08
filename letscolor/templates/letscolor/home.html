@@ -1,0 +1,399 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>home page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'home.css' %}">
+  <style>
+    .carousel-item img {
+      object-fit: cover;
+
+      @media only screen and (min-width: 601px) {
+        height: 650px;
+      }
+
+      @media only screen and (max-width: 600px) {
+        height: 300px;
+      }
+    }
+
+    .carousel-inner .carousel-caption {
+      position: absolute;
+      bottom: 0;
+      background: rgb(0, 0, 0);
+      /* Fallback color */
+      background: rgba(0, 0, 0, 0.5);
+      /* Black background with 0.5 opacity */
+      color: #f1f1f1;
+      /* width: 100%; */
+      padding: 20px;
+    }
+
+    D:\colorbook\project3\letscolor\static\home.css .bg-gradient {
+      /* Specify the gradient */
+      background-image: linear-gradient(to right, #ff7e5f, #feb47b);
+      /* Set some additional styles for demonstration purposes */
+      width: 100%;
+      height: 100vh;
+      /* Set the height to fill the viewport */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .color-book {
+      width: 28.125rem;
+      height: 3rem;
+      margin: 0 auto 6em;
+    }
+
+    .color-book__text {
+      display: block;
+      justify-content: center;
+      padding: 1px 10px;
+      text-align: center;
+      font-family: 'trebuc';
+      font-size: 2.5em;
+      font-style: italic;
+      color: white;
+      text-decoration: none;
+      text-shadow: 0 0 15px #fd2a01;
+      background: rgba(253, 42, 1, 0.45);
+      border-top: 3px solid #fcd597;
+      border-bottom: 3px solid #fcd597;
+      box-shadow: 0 0 20px #fd2a01;
+    }
+
+    #about {
+      position: relative;
+      flex-direction: column;
+      align-self: center;
+      display: flex;
+      width: 35rem;
+      height: 25rem;
+      margin: 0 auto 4rem;
+      font-family: 'trebuc';
+      color: black;
+    }
+
+    .about-gallery {
+      position: relative;
+      width: 60%;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #4c4c4c;
+      box-shadow: 0 0 10px black;
+    }
+
+    .about-summary {
+      position: relative;
+      font-size: 1.2rem;
+      color: white;
+    }
+
+    .italicized {
+      font-style: italic;
+    }
+
+    .about-gallery:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f3bc00;
+      background-position: 100%;
+      background-size: cover;
+    }
+
+    .about-summary:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #312f32;
+      background-position: 100%;
+      background-size: cover;
+      opacity: 0.65;
+    }
+
+    #about p {
+      position: relative;
+      padding: 0.5em;
+    }
+
+    /* "WHAT ELSE" SECTION */
+
+    .what-else {
+      position: relative;
+      flex-direction: column;
+      align-self: center;
+      display: flex;
+      width: 540px;
+      height: 35rem;
+      padding: 2em;
+      margin: -4em auto 20rem;
+      font-family: 'trebuc';
+      color: black;
+      border: 3px solid #f000c3;
+      box-shadow: 0 0 10px violet;
+    }
+
+    .what-else:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("../images/backgrounds/mintbean-monokuma.jpg");
+      background-position: center;
+      background-size: 50%;
+      opacity: .65;
+    }
+
+    .what-else-list {
+      position: relative;
+      height: 18.5em;
+      padding: 1em;
+      margin-top: 1em;
+      font-size: 1.5rem;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .what-else-list:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #312f32;
+      background-position: 100%;
+      background-size: cover;
+      opacity: 0.70;
+    }
+
+    .what-else ul {
+      position: relative;
+      padding: 0.5em;
+    }
+
+    .what-else ul li {
+      margin-bottom: 1em;
+    }
+
+    .hope {
+      color: #ffe200;
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: #aa7913;
+      text-shadow: 0 0 5px orange;
+    }
+
+    /* CONCAVE EFFECT */
+    /* Resource: https://stackoverflow.com/questions/40738978/how-do-i-create-concave-shaped-borders-around-div-elements */
+
+    .concave {
+      position: relative;
+      z-index: 2;
+      width: 540px;
+      padding: 50px 0;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .concave p {
+      position: relative;
+      padding: 0.6em;
+      font-family: 'trebuc';
+      font-size: 1.2em;
+      font-weight: bold;
+      color: black;
+      text-align: center;
+    }
+
+    .what-else-header {
+      position: relative;
+      height: 90px;
+      background: #b3b3b3;
+    }
+
+    .what-else-header:before,
+    .what-else-header:after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      right: -20%;
+      left: -20%;
+      z-index: 2;
+      height: 80px;
+      /* You can change height to increase or decrease concave radius */
+      padding: 2em;
+      border-radius: 100%;
+      box-shadow: 0 0 0 15px black;
+    }
+
+    .what-else-header:after {
+      top: auto;
+      bottom: 100%;
+    }
+  </style>
+
+</head>
+
+<body class="" style="background: rgb(63,94,251);
+background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);">
+
+  {% include 'letscolor/navbar.html' %}
+
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+        aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active" data-bs-interval="2000">
+        <img
+          src="https://images.unsplash.com/photo-1517273570167-36c69226ab59?q=80&w=1373&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          class="d-block w-100" alt="..." style="object-fit: cover; height: 500px;">
+        <div class="carousel-caption mb-2">
+          <h5>CONSISTENCY</h5>
+          <p style="color: gold;">" 水滴石穿，绳锯木断 " (𝓓𝓻𝓲𝓹𝓹𝓲𝓷𝓰 𝓦𝓪𝓽𝓮𝓻 𝓦𝓮𝓪𝓻𝓼 𝓐𝔀𝓪𝔂 𝓐 𝓢𝓽𝓸𝓷𝓮 𝓑𝓾𝓽
+            𝓒𝓸𝓷𝓼𝓽𝓪𝓷𝓽
+            𝓓𝓻𝓸𝓹𝓹𝓲𝓷𝓰 𝓦𝓮𝓪𝓻𝓼 𝓐𝔀𝓪𝔂 𝓣𝓱𝓮 𝓡𝓮𝓼𝓲𝓼𝓽𝓪𝓷𝓬𝓮)</p>
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="2000">
+        <img
+          src="https://images.unsplash.com/photo-1500628550463-c8881a54d4d4?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          class="d-block w-100" alt="..." style="object-fit: cover; height: 500px;">
+        <div class="carousel-caption mb-2">
+          <h5>ART</h5>
+          <p style="color: aqua;">"𝓔𝓿𝓮𝓻𝔂 𝓪𝓻𝓽𝓲𝓼𝓽 𝓭𝓲𝓹𝓼 𝓱𝓲𝓼 𝓫𝓻𝓾𝓼𝓱 𝓲𝓷 𝓱𝓲𝓼 𝓸𝔀𝓷 𝓼𝓸𝓾𝓵,
+            𝓪𝓷𝓭 𝓹𝓪𝓲𝓷𝓽𝓼 𝓱𝓲𝓼 𝓸𝔀𝓷 𝓷𝓪𝓽𝓾𝓻𝓮 𝓲𝓷𝓽𝓸 𝓱𝓲𝓼 𝓹𝓲𝓬𝓽𝓾𝓻𝓮𝓼"</p>
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="2000">
+        <img
+          src="https://images.unsplash.com/photo-1560421683-6856ea585c78?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          class="d-block w-100" alt="..." style="object-fit: cover; height: 500px;">
+        <div class="carousel-caption mb-2">
+          <h5>PAINTING</h5>
+          <p style="color: rgb(0, 255, 0);">"𝓟𝓪𝓲𝓷𝓽𝓲𝓷𝓰 𝓲𝓼 𝓹𝓸𝓮𝓽𝓻𝔂 𝓽𝓱𝓪𝓽 𝓲𝓼 𝓼𝓮𝓮𝓷 𝓻𝓪𝓽𝓱𝓮𝓻
+            𝓽𝓱𝓪𝓷 𝓯𝓮𝓵𝓽, 𝓪𝓷𝓭 𝓹𝓸𝓮𝓽𝓻𝔂 𝓲𝓼 𝓹𝓪𝓲𝓷𝓽𝓲𝓷𝓰 𝓽𝓱𝓪𝓽 𝓲𝓼 𝓯𝓮𝓵𝓽 𝓻𝓪𝓽𝓱𝓮𝓻 𝓽𝓱𝓪𝓷
+            𝓼𝓮𝓮𝓷"</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+
+  <section class="bg-gradient ">
+    <div class="container text-center mt-4 mb-4">
+      <h3 class="alert alert-primary display-4 fw-bold text-info">Let's Color !!!</h3>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container color-book"><a class="color-book__text " href="{% url 'coloring' %}">Paint Here!</a></div>
+    <br>
+    <br>
+    <br>
+    <div class="container text-center mb-4">
+      <div class="alert alert-secondary display-4 text-info">
+        <p>New to <span class="dangan">Color Book</span>?
+        <p>
+      </div>
+
+    </div>
+    <br>
+    <br>
+
+    <div id="about" class="toFadeIn">
+
+      <div class="container text-center about-gallery">
+        <p>About This Coloring Book</p>
+      </div>
+
+      <div class="about-summary">
+        <p>"Color Book is a website in which kids can color the images online.</p>
+        <p>The app was made as a project, using HTML, CSS, JavaScript, and jQuery.</p>
+        <p>Using this app, a user can drag a mouse across a canvas to make free-form lines.</p>
+        <p class="italicized">Compatible with desktop. Not compatible with mobile devices at this time.
+          The app works in browsers compatible with Windows. Apple users, let me know if it works for you, too!</p>
+      </div>
+
+    </div>
+
+    <div class="concave toFadeIn">
+      <div class="what-else-header">
+        <div>
+          <br />
+          <p>What Else Can This App Do?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="what-else toFadeIn">
+      <div class="what-else-list">
+        <ul>
+          <li>Paint with a color with an opacity of their choice</li>
+          <li>Use a dropper to select a color on screen</li>
+          <li>Change the pen size</li>
+          <li>Use an eraser</li>
+          <li>Download painting</li>
+          <li>Delete the painting (with no <span class="hope">hope</span> of recovery)</li>
+        </ul>
+      </div>
+
+    </div>
+
+    </div>
+  </section>
+  {% include 'letscolor/footer.html' %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+  (function () {
+    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+    s1.async = true;
+    s1.src = 'https://embed.tawk.to/65b0b2890ff6374032c41f84/1hkt3ir1e';
+    s1.charset = 'UTF-8';
+    s1.setAttribute('crossorigin', '*');
+    s0.parentNode.insertBefore(s1, s0);
+  })();
+</script>
+<!--End of Tawk.to Script-->

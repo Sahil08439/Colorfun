@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Jquery moved here so it loads before everything else -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColorBook</title>
+    <style>
+        .tabletUp {
+            display: block;
+        }
+
+        body {
+            position: relative;
+            height: 100%;
+            background: linear-gradient(162deg, rgba(127, 123, 130, 1) 11%, rgba(184, 57, 52, 1) 35%, rgba(142, 106, 109, 1) 60%, rgba(196, 43, 35, 1) 76%, rgba(145, 102, 104, 1) 82%, rgba(147, 25, 24, 1) 100%);
+            background-repeat: no-repeat;
+
+        }
+
+        .drawing {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 1em;
+            margin-bottom: 1em;
+            background-image: url("../images/backgrounds/floor.jpg");
+            background-size: 50%;
+            box-shadow: 0px 8px 5px 0px rgba(39, 39, 39, 0.5);
+        }
+
+        .top_drawing {
+            display: flex;
+        }
+
+        #canvas {
+            width: 500px;
+            height: 500px;
+            margin-top: 0.5em;
+            cursor: url("https://cdn-icons-png.flaticon.com/20/9482/9482302.png") 0 10, pointer;
+            background-image: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw8PDQ0NDQ8PDw4NDg4PDQ8QDw8QDg4PFxIWGBYRFhYYHCggGBolHRUVIjEiJikrLi4xGCEzODMsNygtLisBCgoKDg0OGxAQGi0mICUtMi8vLTAuLS0tLS8vNS0tLTUtLS8tLS0tLS8tNS0tLS0tLS0tLS8tLS0tLS0tLS0tLf/AABEIAOEA4QMBIgACEQEDEQH/xAAcAAEBAAMBAQEBAAAAAAAAAAAAAQQFBgcDAgj/xABPEAABAwIDBAcDBQoJDQAAAAABAAIDBBEFEiEGEzFBBxQiUWFxgSMykTNCUoKhFRYXU2JykpOx0iRDVJSys7Th8DQ1NmN0dYOio8HT4vH/xAAaAQEAAwEBAQAAAAAAAAAAAAAAAQIDBAUG/8QALhEAAgEDAwEGBgMBAQAAAAAAAAECAxEhBBIxQRMiUWFxkYGhscHR8DLh8RRS/9oADAMBAAIRAxEAPwD3FERAEREAREQBERAEREAREQBFFUARFEBUREAREQBERAEUVQBERAEREAREQBEUQFREQBERAERRAVERAEURAVERAEREARREBUREARRVAEREAREQBERAEREAUVUQFREQBERAFFVEBUREARFEBUREAREQBRVRAVERARVRVAEREAREQBERAEREAREQBEUQFREQBERAEREAREQBFEQFRFEBURRAVERAEUVQBFEQFRRVAEREAREQBERAFF+JHhrXOdoGguPgANVoMUxZzpKdtM7MHO7Qbe5dmbZpHIWuf/izqVY01d+3UrKSisnRovm2Vpc5ocC5tswvqL8Lhas4rndUwxD2kTHmPnnc3Q/BxCmU4xsn1/0luxt1VosHxproM072tc17mAk6vAsb28L2PktqKuMyboPaXi92jUi3f3KsK0JxTT5+4Uk1dGQil1VqSEREBFVFUAUVRAFEuqgCiqiAqKIgKiIgCIiAIoqgCIiALXYjijKdzBI11ngkOaL2tx09VsVqsf8Akbbjfi9+J7B+l2e1fyWVZtQbi8+jfyWSsrpYMfHI5ZY4Z6RxdlDiMpHaa4CztdCNNQeRKwJ2soXQytDjLKw3jLuwwAa20ubFwAF1l4fVPFK9j4jBlY8QjtWLQ2+mbW48ePxWynANTC0gG0UzhcA2IdGLj4rm2qpecXZ4+D4wnxj3I2X73X9uaySil38NXmawuyOmYb5gctnMaOdxYW7wmIzw0koqI2ZpKhr9cxyBt2Eu9TbQcSs7FcGjqCHOJa4C1wAQR3EFamethpt3BGHy7ggtOUOyPB1a08TcXFgNFWrelfouU73d/FK3LXP+kWzbjzMxmGNllFTOXBxjje+O4DWmx0PMAWvbvuvls7FTMcTHNvZXAtBNx2b307ydCTrwTFsVALN2zeR1EIJNyAWZtWiwOtiR4XWdhNBC1olZC6Nzhwke9zm+WYm32K6UXU7qV1dt5vnqunA2rdjnryeV9MQY2tEjhfLTNJ77C61WFPkwbFKaSXsNa9sdUA67dxKAC4+Dbtd9VbPpt/yh/wDsn/Yre9KWCiSmgqgP4tsU3kW6H9vwCO6bkuj+WT6am4OlSoyStOLV7ZuuMna7U4oKSinqL9oMtF4yO0b9pv6LwSLD3Sx1FQ1vYgkY2R5zWMjwSGjvNhc+Y71uca2udU4XQ00pdvKaM9ZJB9o5hLI3X5ksGY+L/BdJiWCGg2ZiieLTyzNqKnv3z2OJafzQGt+qrVHuba4S/spo4f8ANGEZJbpy6rhLHv1Nv0Mf5tnHdX1AHOwyRrX9L+Mi0dCD2W+2qLHzytPpc+oWT0TVLYsIrZpDZkVZUvefyRHGV55XV8dViDZq3N1eaqz1OVrpDuQb7oAakGzWeRVqku7GPiZaajfU1azV1Byxbl5srH4rcGqaOOjrADFLMyKqpjd2ZjgQ5geO/hdvivetnsVZW0dPWR6NqImvy3uWO4OYfFrgR6LzvbPa7DK+k3URm3zCHR5qeVjfEXIsO/0TodxnJJU4Y89l16qlv6CWMeuV31nKab2zcenQpq4SraZVpRtJOzxb0Zze3NOH4zPG1t3z1EcTNSLyPeGNv6kL6bHYw/CMRyz3ZTTuEFW1xOWJ17Mn14WJIPg49y+21X+kEf8AvOh/tLF0PSrs4COvRtuHdioFvDR3r/jisU3Fb10budk5U5uGmmklKCs7ZUv1HV9IjA7CKwH6MX9Yxcn0JiwxMDQCSlsLnT2blgYRtIajAK2hndepoo4Q0uPampt6wMf4ke6fIHms/oWcAMUJ0AfSknuG7ctk71vgvqzhlTdPQzjJZVT7I2nSti4ipG0jT26o+08Ihy9XW9A5eWyYDKKGGuLckNQXiFwc8PGU2D/C5Fx3jVZm2uL9drZZS5whL2xMcAXOjgD7F4aNSbXdbvK7HGNsMHlw/qEW/a2OJjKcdVmAYWNs0XtpppfxWUnv3ST9DtpxlpY06XZ3vmWL2v525XX0Ov2Dx3r+GwTvI37Lw1Q7p2aOPhfRw8HBecdKGCmnretU943TESxyC4yTtNwf0hf1CdFeM9WxJ1I53scQbZt+DamMEt8szMw82tXoe3+E9aoJLD2kN5Gd9h7w+GvotKjc6e5dM/n5HFTitJrOzl/F4z4Pj2/JsdmMYbXUNNWN030bS9v0JBo9no4OHouM6X8VAihoQflDvph+QLhoPqHH6oWv6IMYEUlZh0pytINZDc6NtZszfDgx1vFxXO4m5+MYw2FpOWrmyeMdMz3j4ezb8T4qak90Ul1LaXSqjqJup/Gnd+vh8jv+iHB9xhvWnNIkxB++APFsA0iHkRd/113i+UUTWNaxgDWsaGtaNA1oFgAvqt0rKx5U5ucnJ9QiIpKhRVEB8KumZKx0cgu1wseRHiDyK1bc7aqnZL2vZTtZKLDOLxnUcndnyP2LdrSY8/dyUVR82KfLJ4MkYWXPgLg+iwrJK0/Br2uufTny9y8M49fobtYzKOJrs7Y42v8ApBrQ742WFj+Imnia5tgXvDMx4A2J+OixdmMXfUuqY3EPFO6ICQcC5zSSw+IAafrBUepg6/YWe61+ML4+I7N7N/Qy6eBsdWQy4a+J7iz5rXF7bkDldbRaqlkz1tUfmwRwwg/6w5nvHwMfxW1W1KyWPF/VkSv1PLulDZetrZy6kgMjTT5Lh8bRm101cF39ZhwnonU0g9+ENN/mvDRY+hC816QNoK+nxOWGnrJoo7QhkTGQuGZzW6Nuwkkk8PFav7pbRfj8R/msX/hWKlBOSzlu5670uoq06TvBWWMtPOcmZgewFYcQpzVQltJFLvpXF8bhJk1YywcTq7LfTgCu76QcNmqqHc00Zkk3rXZQ5jdA1+t3EDmuD2b2vxOLEaWCtnfNFPMyCWKaGJj2F+jXtLWtIIdbQ30uvUtosTFLRz1Gl42HIDzkOjR8SFaKg6bSePmZ6qpqFq4ymluxZLjy63y+cnnNHs7ikWDy0DKYiSeullkAlg+Rysy657auH/L4rL2P6PA6GZ+KRuErpSIYmygZIgBqSw6km548LLkW7UYw5kkrK+o3bH7su3VPkbIRcNzbvjYg28V7HsjjIrqClq9A+SO0zR82ZpyyN9HB32JTUJt/RmmrqanTw24V5N3i3e/VXv8AI1f4OsM/FSfrXriqvY7EKXEWVWH05kZSziWE72FueO9nRnM4EXYXNOnNfbbza+ubXPpaWd1PFG5sQEbI3STSG3NzSb3NgG29Vq77RHXPiv6p4+zIqPs73injwNaVPWbO/OLUlxKT4fpx7m42h2Vr5sXZVR07jB12llLt5CCI2zMc42zX0AK9Qq6Zk0UkUguyRpa4eBXlOxO1VezE6eirZpJ46lz4i2ZrRLBII3Pa4ODQTfLYg96+2z20Ne/H46WSrkkpny1YMTmxZbNikc0XDQdCBz5K9OUErLrc5dVQ1Em99l2cVxfK6NedzVYj0f17ah+4gL47vDJGywtzMJvaxeDbQGx7h3LaYBs7ilLQ4nC2mImq3U7GDewfJiNwkdcPsO763gvWSvJ8T2irmbQRUzaqQUzq+CIw5YSzdueAW3y5reqjsowsrvODRa2vqYu8Y9y0nznb8S7H9HsjpKh+KxuYxoY2njEjbudqXyEsJ090AX7/AAXVfg6wz8VJ+teuD2p2kxKPEqqCCtmYwSyNijayB1rXNhdhOgBPoun6MNqpao1FFWymSpi9tDI4Na6WAkBwIaALsd4cHt8VMOyfdsTqXrox7dzsnbEW8X4x0NDtRsDVsqQ/C4iWRmOWB5kjBjlaQRfM4E6herUEj5IInTxmKR8bTLE4tdkeR2mXBINjdefdK+OVlG+E0lTJADC9zmtbE4OcC6xOZp7l6BhcpdTQPebudBE57jbUlgJKtSSi2o+JyaudWpTpzq2ynZ5u0v8A1c8kx/YOt65K6kgc6LM8xPEsTHZXDVvvg8DY966Doz2SqKWeqq62PJJkbBTNLmOIYe1I/skgXOUd/ZPeuaxnazEZ6+oFBVTsivI6KKOOF4bCywMmrCQOZJPzl1/RdtHNWRVNPVymWoppGuD3BrXPgkHZJDQBcOa8cO5Z0VT3d1s7dbLVrT2qKNsXtfd5bjvURF1HiBERAERRAVYuIUjZ4ZIX8HttfuPI+hWUiiUVJbXwwnbJyP3UY0GgxKESaZRna17J2Dg4B2juXiqzG4ImiiwynbvTfdwxsbGyO/8AGPDfdbzJP2nRfPHsa3k/Vow6TKdI42GSSRw4usAbNHfwWLhmLmlmyyMfHG83ljkjMb2XPyouO0L8TqvDWqnGtsTfZ8brLni27162v8cnZ2acb2z4X+32Orweg6vCGOdnkcXSTScN5K43c7y5AcgAFsFAi9xRUVZHI3d3PFekabd442axcIZaCYtBALhGY3kC+l7NXSfhbg/kNV+nTfvrnukCnMmOMaWuLJJsPjktcXY58bXC44aE6rvfwe4X+IP62X95c1Lf3tviz2tR/wAuyl2ylfZG1rWt8fO551SVD8Wx6nmhjcwCogqJGkgmKGIg3cRpc5QLDmV0HTBjNtzRNOgvPLbyIaPhmPqFoqzD46LaGmELXNigqoSHanJG4doX7rEhY4o5sXxd7ReMVDpXuke0uEMLNG6XFz7jePNUveO1ctv+zpjTiq0a8sQhCLXxwr+fL9bHSYVBQN2fFI+so+sSsNTKOswZhUu7WT3uIFmfVC+HQ9im7qKvDnnSX+FQd2YWZK0f9N3xWT+CRv8AKx/N/wD3XMYrhsuDYlTyxl8vVnRTZmtsZYSMsrQL82l48wrtuM1Jq3Q5406VWjUpQqb5PvLDWVz63M6QA7VwB3D7oSn1EcxH2gL2heJ7c0U8OIivgLmtfIyopahjLtuRcHUWPEgg8j4r5npFxYab6Dz6rr/TSnVjC6l4sajRVdUoVKKTW1Llco9NNLhPXQ8mk68JcwBnbvxKQfmZr3sTpbmvG8UqJYsRkmp5HRTMmm3b2Zc4uXBwFwRwJWy2UpKmuxikqXMdIWVHWKmoMZaxoa0kAkCwJOUBo/YCs7ZmN33zQkg239drY2+RkVZPc42xz9jSlT/5+1U3vtBXT+nXj9Rp/vlxf+XVf6MX7i+WEzSyYrh8lQ5z5XV9KXueAHOOcamwC/oMrxjGY3ffLC6xsMSptbG1t4FaUXGUbu+StHU06tOqoUlHuPK/xFkaDtXCCLg11QCDwIME4IWLtNRy4RisdTTg2jk30I5SRuuHxHzbmHnryWa6J331Quscor5bm2g9jMF3XSBgYq6NxaLy095I+8jm37L+niq7Xs3LlN/2KlZU68YT/jOnFP52fwOG6XK2Opgo6mF2aKejfJG7vaQ4j11XX7TYr1XA4i02knp4YWd/ajGY+jQfsXjdU2bq5gO8dHGJt0y2kee7nBunAuJPqV1e3tdJOaOliY5/V6anY1oBs+eQMuP6A8LFQqn8mutjWWialRpz4hub9E7/ADx7mb0VOo4zW1VZUU0T5P4JHHLNEx+7AzSOs43s5xA/4a1uEVrMOx2OSOVj6aSV9PJIx7XxuhlcLOuNNHhh8NV0LOiYEAvqxmsMw6vcX5651o9sNhDRU7XCXfskcY3WjyFtxppc+PwVnuik2uCsHQrVKkVVu6mLbWrPpz4HtqLnNg8WdV4bTSy337G7mpvx30fZLj+cLO8nBdGutM+flFxbi+UEREICIiALAxmsEFNPMb+zjcRbiTwAHjeyz1rMXh3hpoj7rqhjn/mxgyD0zMaPVUqX2tLn84JjyfDZnCerQ5pBepns+pfxOblGD9Ft7D1PMrJxjDmVMJjeBfUxu5tNv2citiijsobOzt3bWt5E75bt18mo2anc+lY2T5SEuhkvxuw2B9RlPqtutdRR5KiraODzFN9ZzSw/1YWxSlfYr88e2H8xK18GH12My7kOvIDq0XNrBpN/IObfuzN5kXzFzEUbnV87Y3ljntrsrwASx2SgsQCLLUu2oqRRGmuPuuKjqYFmjM8nszZbWylvO1rg8grOaXJSo1D2O2ZUMc57GvaXx5c7Q4Fzb8Ljlda7GMRfDPQRMDSKqodHITckNEbndnxuAuPxKvmoZcZlY5j6iGDC2mZ0bA57nNdneQABc5b24LPmbUskwmSrqBUF9U6VmWJsZYzqzyWWb7xuoc/34mW++Ev29vsdwi4SHbRj6GpcZ3NrT1h0cQgeTT6ndt9yxAaAS43Fyb24D9UlbWVNZHTtrXQA4dBUHLDA8ukIZm95v5V0U0+CVVi/45/X+DuV+cg7h8AuDjxOuEwputlzhibqbePhh7UW4BsWtA5kn+7RfvEa+vo5qmndVOqGvo5KiGV0cTZIHsc0cGtsW68xzHrO9B1Fy0d3ZafZzEX1Mc0kgaDHUzwtDb2yMdYX7yudkqK6Ojoa3r75OsPo88fV6YMtI5uZtw2/MhZGylJIRNN1uWKJtfU5oA2n3T/aWsXOYXanuPlZFK8rE7m2sfTyOzUXC4TPXVMFZUfdGRnVp52CJtPSu7LAHC5Lb8188ExevqKingbUMBlwzrD3SQtc0S54wXgNym/aOl7a8FCncKpdXt9PydxLMxmUPc1udwYwOcBnceDRfidOC12zmIvqYZJJA0FtRPG0NvYNY8tHHnouaxA1eSgFe2J724xDHE8Mb7SHMBnLfmm97W5ALAgx2amoqhsDKhjmVlQ8VG4bLTOBkJ3bnFwy9xNtPtRzs8le0Sz5fg9LWnnxJ7cSp6QBu7kp5ZXnXNma4AAdw1K52txGvfURCOWTJ1KCaVtC2lnAleT2hvTfIcrrG+uXzWNRVlTPV4ZNA+OSeSiqgZJ2ZBlE1iXNj+do0WBtxKORMpri3X7o9EX5ebAnXTu4rh8R2krI4sTp5RHHV0cUM0U0AJje1zgPdfex1HG/HwX0qJKyGPD5ziD5m1VTRxvYaema0slIzaht+CncT2ifC/c/g62nq45C4McCWgEjmAbgG3ddrh5tI4grJXP7PfLzd5poP7RVroFKdzaSs7BERSVCIogKsd7Lyxn6LZPiS3+9ZCihq4KiIpB8cntM3eyx9Dp+0r62VRQlYGJBRRseZA3tm93HV2ts3xytv+aOQFvmcJpusCr3LOsDhLbt+7l/Zos9FJDV+TW1OCUspmdLCx5qN1vib+03d8l9eVyvhSbL0EMjJYaaKORhuxzQQQbEX49xK3KKLLkjbHwOaxfDMQm6xCyekbT1ALe1BJvo2EWtcOs4+azJdmqOSOCOeBkxgiZEx7x28rW2Go/xqtyibUNi65NMNn6cSb5rXbwVBqR2zl327yX8rAaL9UeEND5pp3CeaoaI5C5oEbYhwiYzWzeZuSSeJ4W26JZE7UaI7KUIGVkAiBkjkO7Lm3cx2Zt/VWHZejZUGpEZzmTe5TJIYhLe+8yXy5r8DbTkt4olkV7OPgjUv2cojK6fq8bZnhwMjRlf2mkE6eDj8V+sNwOmpjG6GOzooOrteXOc/c3By/Fo+C2qiWRO1eBjVdDFNu96wP3UjZY737EjTdrh4hYk+CQuhNOzPFC97nysidl3pcbuBPEAk62stqiWJcUzS1Oy1BKIhLSwvEMbYort9yNvBoWVS4PTROjdFC1joWPjjIv2GOdmc0eBOq2CJZDbHwNe3CKcOnfumF1SAJy4ZjKBewN+Wp0WGzZaiaGiOERBs0M9oy5oMkZJYT6kreIlkRtXgYlPRMjeXsGUu0NuBFybW7rucR3Zj3lZaiqksEREAREQBRVEAREQBERAEREAREQEVREAUVRAEREAREQBERARVEQEVREAREQBERAFFVEBUREAREQBRVRAVERARVEQBERAEREARFEBVFUQEVUVQBRVEAREQBERAEURAVRVEAREQBERAFFUQBERAEREAREQBERAEREAREQEVREAREQBERAEREAREQBERAEREAREQEVREAREQBERARVEQBRVEAREQBERAEUVQBERAEREBFURAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREB/9k=");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 400px;
+            border: 2px solid red;
+            box-shadow: 10px -8px 1px 2px rgba(109, 19, 19, 0.5);
+        }
+
+        .homeTablet_controls {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .homeTablet {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: 0.5em;
+            margin-right: 0.5em;
+            font-size: 2em;
+            color: white;
+        }
+
+        .homeTablet:hover,
+        .homeTablet:focus,
+        .homeTablet:active {
+            color: #f000c3;
+        }
+
+        .homeDesktop {
+            display: none;
+        }
+
+        .controls {
+            position: relative;
+            margin-top: 2.8em;
+            margin-left: 0.8em;
+            font-family: 'trebuc', sans-serif;
+            font-size: 1.2em;
+            color: rgb(255, 108, 255);
+            background-color: rgb(255, 231, 93);
+            border: 2px solid orange;
+            border-radius: 15px;
+        }
+
+        .controls_front {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 0.2em;
+        }
+
+        .color-picker {
+            margin-bottom: 1.5em;
+            margin-left: 1.5rem;
+            cursor: default;
+        }
+
+        .color_opac {
+            width: 10rem;
+        }
+
+        .color-text {
+            margin-bottom: 0.5em;
+            margin-left: 0.5em;
+        }
+
+        .pen-text {
+            margin-bottom: 0.3em;
+            margin-left: 0.5em;
+        }
+
+        .pen_range {
+            width: 12rem;
+            margin-left: 0.5em;
+        }
+
+        .button {
+            padding: 1rem;
+            font-size: 1.2em;
+            text-align: center;
+            text-decoration: none;
+            cursor: url(""), pointer;
+        }
+
+        .button:active {
+            transform: translateY(4px);
+        }
+
+        .erase {
+            align-self: center;
+            width: 10rem;
+            padding: 0.5rem;
+            margin-top: 1em;
+            color: black;
+            background-color: pink;
+            border: 1px solid black;
+            border-radius: 15px;
+        }
+
+        .erase:active {
+            color: white;
+            transform: translateY(3);
+        }
+
+        .undo-redo {
+            display: grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 0.5em;
+            margin: 1em 0.625em 0.625em;
+        }
+
+        .undo,
+        .redo {
+            border-radius: 0.5rem;
+        }
+
+        .redo {
+            background-color: black;
+            color: white;
+        }
+
+        .download {
+            height: 60px;
+            margin-top: 0.4em;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        .download:active {
+            transform: translateY(4px);
+        }
+
+        .downloadText {
+            width: 100px;
+            margin-top: 0.5em;
+            margin-left: 1.9em;
+            font-family: 'PoorRichard', serif;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: black;
+        }
+
+        .erase:hover,
+        .undo:hover,
+        .redo:hover,
+        .download:hover,
+        .erase:focus,
+        .undo:focus,
+        .redo:focus,
+        .download:focus {
+            transform: scale(0.90);
+            box-shadow: 0 0 12px aqua;
+        }
+
+        .nameDrawingWord {
+            display: flex
+        }
+
+        .name_pic {
+            width: 320px;
+            height: 70px;
+            padding-left: 0.5em;
+            padding-bottom: 4em;
+            margin-top: 0.83em;
+            font-family: 'DorBlue', sans-serif;
+            font-size: 1.2em;
+            color: black;
+            -webkit-text-stroke-width: 1.2px;
+            -webkit-text-stroke-color: gray;
+            background-color: white;
+        }
+
+        .drawingBlink {
+            width: 270px;
+            height: 77.5px;
+            margin-top: 0.98em;
+            background-color: #218acc;
+            border-radius: 0 30px 30px 0;
+        }
+
+        .painting {
+            margin-top: 6%;
+            text-align: center;
+        }
+
+        .painting p {
+            font-family: 'GillSansMT-Condensed', sans-serif;
+            font-size: 2em;
+            color: white;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        .restart {
+            color: white;
+            background-color: black;
+        }
+
+        .horizontal_rule {
+            width: 80%;
+            margin: auto;
+            border: 5px solid #4b0d0d;
+        }
+
+        .gallery {
+            position: relative;
+            padding: 1em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background: gray;
+            box-shadow: 0px 8px 5px 0px rgba(39, 39, 39, 0.5);
+        }
+
+        .gallery:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 250px;
+            opacity: 0.22;
+        }
+
+        .gallery-images {
+            position: relative;
+            justify-content: space-around;
+            display: grid;
+            width: 100%;
+            grid-template-columns: repeat(4, auto);
+            gap: 0.5em;
+            padding: 1em;
+        }
+
+        .image {
+            position: relative;
+            padding: 8px;
+            margin: 5px;
+            border: 3px solid pink;
+        }
+
+        /* Similar to highlight for desktop */
+        .image:hover,
+        image:focus {
+            border: 3px solid #f000c3;
+            box-shadow: 8px 5px 10px gray;
+        }
+
+        .image~p {
+            display: none;
+        }
+
+        .reset {
+            margin-top: 0.5em;
+            margin-left: 43%;
+            font-size: 1.5em;
+            color: black;
+            background-color: rgb(255, 226, 62);
+            border-radius: 8px;
+        }
+
+
+        .reset:hover,
+        .reset:focus {
+            transform: scale(0.90);
+            box-shadow: 0 0 12px aqua;
+        }
+
+        .highlight {
+            border: 4px solid #f000c3;
+        }
+
+        /* DESKTOP */
+        @media only screen and (min-width: 1260px) {
+
+            .top_drawing {
+                top: 0;
+                right: 0;
+            }
+
+            .homeTablet {
+                display: none;
+            }
+
+            .homeDesktop {
+                position: absolute;
+                top: 0;
+                right: 0;
+                display: block;
+                height: 60px;
+                padding: 10px;
+                margin-left: 15rem;
+                font-family: 'trebuc';
+                font-size: 2em;
+                color: black;
+                text-decoration: none;
+                background-color: white;
+                cursor: url(""), pointer;
+            }
+
+            .homeDesktop:hover,
+            .homeDesktop:focus {
+                color: white;
+                background-color: black;
+            }
+
+            .homeDesktop:hover .fas,
+            .homeDesktop:focus .fas {
+                color: #f000c3;
+            }
+
+            .controls {
+                margin-left: 4rem;
+            }
+
+            .drawing {
+                margin-left: auto;
+            }
+
+            .name_pic {
+                width: 700px;
+                height: 77.5px;
+                padding-bottom: 0;
+                margin-top: 0.56em;
+            }
+
+            .name_pic {
+                font-size: 1.8rem;
+            }
+
+            .gallery-images {
+                grid-template-columns: repeat(5, auto);
+            }
+
+            .image:hover,
+            image:focus {
+                border: 3px solid #f000c3;
+                box-shadow: 8px 5px 10px black;
+            }
+
+            .image-desktop {
+                display: block;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'letscolor/navbar.html' %}
+    <div class="tabletUp">
+
+        <div class="drawing">
+            <div class="top_drawing">
+
+                <canvas id="canvas"></canvas>
+
+                <div class="homeTablet_controls">
+
+                    <div class="controls mt-0">
+
+                        <div class="controls_front text-center">
+                            <!-- JSColor Picker -->
+                            <p class="color-text">Color / Opacity: </p><input onInput="draw_color = this.value"
+                                value="#000000FF" class="color-picker text-center color_opac" data-jscolor="{}">
+
+                            <p class="color-text">Dropper Here: </p><input onInput="draw_color = this.value"
+                                type="color" class="color-picker" style="margin-left: 40%;">
+
+                            <p class="pen-text">Pen Size: <span id="pen-width"></span></p>
+                            <input type="range" min="1" max="100" class="pen_range" id="penRange">
+
+
+                            <button onClick="erase_color()" type="button" class="erase button" id="erase">Erase <i
+                                    class="fa fa-eraser"></i></button>
+
+                            <div class="undo-redo">
+                                <button onClick="undo_last()" type="button" class="undo button"
+                                    style="background-color: rgb(81, 255, 81);">Undo</button>
+                                <button onClick="redo_last()" type="button" class="redo button" disabled
+                                    style="background-color: rgb(255, 96, 96);">Redo</button>
+                            </div>
+
+
+                            <div class="download"
+                                style="margin-left: 5%; margin-right: 5%; margin-bottom: 5%; background-color: aquamarine; border-radius: 15px;">
+                                <div onClick="saveCanvas()" class="downloadText">
+                                    <p>Download</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="index.html" class="homeTablet"><i class="fas fa-house-damage"></i></a>
+                <!-- .drawing end div -->
+            </div>
+
+            <hr class="horizontal_rule">
+            <div class="gallery">
+                <div class="gallery-images">
+                    <div>
+                        <img class="image"
+                            src="https://www.homemade-gifts-made-easy.com/image-files/kawaii-coloring-pages-400x518.png"
+                            alt="Cute Image" width="160" height="120" onclick="load_pic(this)">
+                        <p>Image-1</p>
+                    </div>
+
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://img.freepik.com/free-vector/hand-drawn-kawaii-coloring-book-illustration_23-2149738641.jpg?size=338&ext=jpg&ga=GA1.1.735520172.1709078400&semt=ais"
+                            width="160" height="120">
+                        <p>Image-2</p>
+                    </div>
+
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://coloringhome.com/coloring/di8/xpK/di8xpKz4T.png" width="160" height="120">
+                        <p>Image-3</p>
+                    </div>
+
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://e7.pngegg.com/pngimages/234/378/png-clipart-coloring-book-christmas-coloring-pages-colouring-pages-child-animal-colouring-child-white-child-thumbnail.png"
+                            width="160" height="120">
+                        <p>Image-4</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://i.pinimg.com/736x/c5/ca/d3/c5cad3c57cef85229c5f9aaca2a734e7.jpg" width="160"
+                            height="120">
+                        <p>Image-5</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://img.freepik.com/free-vector/hand-drawn-kawaii-coloring-book-illustration_23-2149716109.jpg?size=338&ext=jpg&ga=GA1.1.1395880969.1709251200&semt=ais"
+                            width="160" height="120">
+                        <p>Image-6</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://www.bestcoloringpagesforkids.com/wp-content/uploads/2013/06/Fruits-Coloring-Pages-For-Kids.png"
+                            width="160" height="120">
+                        <p>Image-7</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://teachmint.storage.googleapis.com/public/836539394/Assignment/e5a9648e-b550-400e-b7b4-49520f5bf24c.jpg"
+                            width="160" height="120">
+                        <p>Image-8</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://i.pinimg.com/736x/65/f8/45/65f8454c04ad357753bf63c4392fa57f.jpg" width="160"
+                            height="120">
+                        <p>Image-9</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://coloring-pages.info/images/ccovers/1475883567lisa-frank-kids-colouring-pages-a4.jpg"
+                            width="160" height="120">
+                        <p>Image-10</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://thumbs.dreamstime.com/b/whale-coloring-page-kids-cute-funny-provides-hours-fun-children-to-color-very-easy-suitable-little-toddlers-236788983.jpg"
+                            width="160" height="120">
+                        <p>Image-11</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://i.etsystatic.com/18554555/r/il/807611/2359765082/il_fullxfull.2359765082_255n.jpg"
+                            width="160" height="120">
+                        <p>Image-12</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://www.coloringpages-forkids.com/minis-menu/minis-sm/jumping-unicorn.png"
+                            width="160" height="120">
+                        <p>Image-13</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://th.bing.com/th/id/R.0d4cba1c3a2308d772024c24fd7415c8?rik=Ln4tYZqsg7nb%2fw&riu=http%3a%2f%2fcoloringpagesfortoddlers.com%2fwp-content%2fuploads%2f2015%2f12%2fparrot-birds-coloring-pages.gif&ehk=QyeG9EhVbiAAewUTPGSbtzahlR0y5K7TTM%2frjg9m8sc%3d&risl=&pid=ImgRaw&r=0"
+                            width="160" height="120">
+                        <p>Image-14</p>
+                    </div>
+                    <div>
+                        <img class="image" onClick="load_pic(this)"
+                            src="https://coloring-pages.info/images/ccovers/1551827466doodle-flowers-in-black-and-white-floral-pattern.png"
+                            width="160" height="120">
+                        <p>Image-15</p>
+                    </div>
+
+
+
+
+                </div> <!-- gallery-images end div -->
+
+            </div>
+
+
+
+            <hr class="horizontal_rule">
+
+            <div class="nav_tablet">
+                <button onClick="reset_canvas()" type="button" class="reset button">Delete Painting</button>
+            </div>
+
+            <!-- tableUp end div -->
+        </div>
+
+        <script>
+
+            const canvas = document.querySelector("#canvas");
+            const context = canvas.getContext("2d");
+
+
+            canvas.height = 500;
+            canvas.width = 500;
+
+            let start_background_color = "white";
+            context.fillStyle = start_background_color;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+
+            // Variables
+            let draw_color = "red";
+            let draw_width = "10";
+            let is_drawing = false;
+
+            let slider = document.getElementById("penRange");
+            let output = document.getElementById("pen-width");
+            output.textContent = slider.value;
+
+            let imageValue;
+
+            //Array
+
+            let store_array = [];
+            let index = -1;
+
+            let removed_array = [];
+            let indexRemoved = -1;
+
+            // EventListeners
+
+            // For mobile and tablets
+            canvas.addEventListener("touchstart", start, false);
+            canvas.addEventListener("touchmove", draw, false);
+            canvas.addEventListener("touchend", stop, false);
+
+
+            // For computer
+            canvas.addEventListener("mousedown", start);
+            canvas.addEventListener("mousemove", draw);
+
+            canvas.addEventListener("mouseup", stop, false);
+            canvas.addEventListener("mouseout", stop, false);
+
+
+            function start(event) {
+                is_drawing = true;
+                draw(event); //needed to make dots
+
+                event.preventDefault(); //To prevent default changes to appear
+            }
+
+            function draw(event) {
+                if (is_drawing) {
+                    context.lineTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetLeft);
+
+                    context.strokeStyle = draw_color;
+                    context.lineWidth = draw_width;
+                    context.lineCap = "round";
+                    context.lineJoin = "round"; //To get a full line with less interruptions
+
+                    context.stroke();
+
+                    //To make path smoother
+                    context.beginPath();
+                    context.moveTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetLeft);
+
+                    event.preventDefault();
+                }
+            }
+
+            function stop(event) {
+                if (is_drawing) {
+                    context.stroke();
+                    context.closePath();
+                    is_drawing = false;
+
+                    store_array.push(context.getImageData(0, 0, canvas.width, canvas.height));
+
+                    index += 1;
+
+                }
+                context.beginPath(); //to close the path if pen goes off the canvas
+
+                event.preventDefault();
+
+            }
+
+            // Pen Width
+            slider.oninput = function () {
+                draw_width = this.value;
+                output.textContent = this.value;
+            }
+
+            // UNDO 
+            function undo_last() {
+                if (index === 0) {
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.fillStyle = start_background_color;
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                } else if (index < 0) {
+                    reset_canvas();
+                } else {
+
+                    removed_array.push(context.getImageData(0, 0, canvas.width, canvas.height));
+                    indexRemoved += 1;
+
+                    store_array.pop();
+                    index -= 1;
+
+                    context.putImageData(store_array[index], 0, 0);
+
+                    document.querySelector(".redo").disabled = false;
+                }
+            }
+
+            // REDO 
+            function redo_last() {
+                if (index === -1) {
+                    context.putImageData(removedLast[0], 0, 0);
+                    store_array.push(context.getImageData(0, 0, canvas.width, canvas.height));
+                    index += 1;
+                } else {
+                    context.putImageData(removed_array[indexRemoved], 0, 0);
+                    removed_array.pop();
+                    indexRemoved -= 1;
+
+                    //to put the returned imaged back to the restore_array
+
+                    store_array.push(context.getImageData(0, 0, canvas.width, canvas.height));
+                    index += 1;
+
+                    if (removed_array.indexOf(removed_array[indexRemoved]) === -1) {
+                        document.querySelector(".redo").disabled = true; //Needed to prevent error
+                    }
+                }
+            }
+
+            // ERASE
+            function erase_color() {
+                //To prevent the color of the main background
+                draw_color = "white";
+
+                // context.globalCompositeOperation = 'destination-out'
+            }
+
+            // RESET CANVAS
+            function reset_canvas() {
+                //declaring the fill's color 
+                context.clearRect(0, 0, canvas.width, canvas.height); //clears the background
+                context.fillStyle = "#f000c3";
+                context.fillRect(0, 0, canvas.width, canvas.height); //refills with white again
+
+
+
+                drawing_image("https://www.homemade-gifts-made-easy.com/image-files/kawaii-coloring-pages-400x518.png")
+
+                //reset array and index
+                store_array = [];
+                index = -1;
+
+                removed_array = [];
+                indexRemoved = -1;
+
+                document.querySelector(".redo").disabled = true;
+            }
+
+            // LOADING IMAGE
+            function load_pic(element) {
+                let imageValue = element.src;
+                drawing_image(imageValue);
+            }
+
+            function drawing_image(image) {
+                let newImage = new Image();
+
+                newImage.onload = function () {
+                    if (context) {
+                        context.clearRect(0, 0, canvas.width, canvas.height); // Clearing the canvas
+                        context.drawImage(newImage, 0, 0, canvas.width, canvas.height);
+                        store_array.push(context.getImageData(0, 0, canvas.width, canvas.height));
+                        index += 1;
+                    } else {
+                        console.error("Canvas context is not available.");
+                    }
+                };
+
+                newImage.onerror = function () {
+                    console.error("Failed to load the image: " + image);
+                };
+
+                if (image !== undefined) {
+                    newImage.src = image;
+                } else {
+                    console.error("Image source is undefined.");
+                }
+            }
+
+            // SAVE CANVAS
+            function saveCanvas() {
+                try {
+                    const url = canvas.toDataURL();
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "canvas-image.png";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } catch (error) {
+                    console.error("Error saving canvas:", error);
+                    alert("Failed to save canvas. Please try again.");
+                }
+            }
+        </script>
+
+
+        {% include 'letscolor/footer.html' %}
+
+</body>
+
+</html>
