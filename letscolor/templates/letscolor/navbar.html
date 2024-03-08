@@ -15,7 +15,8 @@
       color: aqua;
     }
 
-    .btn:hover {
+     .btn:hover {
+      border-color: white;
       transform: scale(0.90);
       box-shadow: 0 0 12px aquamarine;
     }
@@ -37,14 +38,14 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-size: 20px;">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
+            <a class="nav-link" aria-current="page" href="{% url 'home' %}" style="color: aqua;">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'coloring' %}">Let's Color</a>
+            <a class="nav-link" href="{% url 'coloring' %}" style="color: aqua;">Let's Color</a>
           </li>
           <span>
             <li class="nav-item">
-              <a class=" nav-link me-2" href="{% url 'contact' %}">Contact</a>
+              <a class=" nav-link me-2" href="{% url 'contact' %}" style="color: aqua;">Contact</a>
             </li>
           </span>
 
